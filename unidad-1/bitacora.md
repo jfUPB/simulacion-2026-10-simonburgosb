@@ -189,14 +189,45 @@ if (r < 0.01) {
 
 ```
 
-[Archivo p5.js]([https://ejemplo.com](https://editor.p5js.org/simonburgosb/sketches/UJ_XaLKmO))
+[Archivo p5.js](https://editor.p5js.org/simonburgosb/sketches/UJ_XaLKmO)
 ![Img Actividad](actividad5.png)
+
+### Actividad 6
+
+Espero que cuando incie el programa pase que durante el ancho de la pantalla se vaya proyectando el ruido de perlin en forma de grafico
+``` js
+let xoff = 0;
+
+function setup() {
+  createCanvas(600, 400);
+  background(255);
+}
+
+function draw() {
+  stroke(0);
+
+  let x = 0;
+  xoff = 0;
+
+  while (x < width) {
+    let y = noise(xoff) * height;
+    line(x, height, x, height - y);
+
+    xoff += 0.02;
+    x += 10;
+  }
+}
+
+
+```
+([https://editor.p5js.org/simonburgosb/sketches/otxT05gaM])
 
 ## Bitácora de aplicación 
 
 
 
 ## Bitácora de reflexión
+
 
 
 
