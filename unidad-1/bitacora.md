@@ -127,10 +127,14 @@ function draw() {
   circle(x, y, 16);
 ```
 
-[carpeta](https://ejemplo.com)
+[Archivo p5.js](https://ejemplo.com)
+
+![Img Actividad](actividad4.png)
+
 
 ## Bitácora de aplicación 
 
 
 
 ## Bitácora de reflexión
+
