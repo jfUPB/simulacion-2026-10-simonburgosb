@@ -223,10 +223,76 @@ function draw() {
 ([https://editor.p5js.org/simonburgosb/sketches/otxT05gaM])
 ![Img Actividad](actividad6.png)
 ## Bitácora de aplicación 
+Este diseño genera una composición interactiva donde, al hacer clic, se selecciona aleatoriamente una forma geométrica y esta se dibuja repetidamente en posiciones que varían según una distribución normal, haciendo que la mayoría de las apariciones se concentren cerca del centro del lienzo; al mismo tiempo, el color de relleno cambia de manera suave usando ruido Perlin
 
+``` js
+let particula;
+let f;
 
+function setup() {
+  createCanvas(600, 600);
+  particula = new Particula();
+}
+
+function draw() {
+  background(220);
+
+  particula.forma = f;
+  particula.move();
+  particula.form();
+}
+
+function mousePressed() {
+  f = int(random(1, 4));
+}
+
+class Particula {
+  constructor() {
+    // centro base
+    this.cx = width / 2;
+    this.cy = height / 2;
+
+    this.x = this.cx;
+    this.y = this.cy;
+
+    this.tc = random(1000); // noise para color
+    this.forma = 1;
+  }
+
+  move() {
+    // movimiento con distribución normal
+    this.x = randomGaussian(this.cx, 20);
+    this.y = randomGaussian(this.cy, 20);
+  }
+
+  form() {
+    // fill controlado por noise
+    let c = noise(this.tc) * 255;
+    fill(c, 150, 200);
+    noStroke();
+    this.tc += 0.01;
+
+    if (this.forma === 1) {
+      circle(this.x, this.y, 30);
+    } 
+    else if (this.forma === 2) {
+      rect(this.x, this.y, 30, 30);
+    } 
+    else if (this.forma === 3) {
+      triangle(
+        this.x, this.y - 15,
+        this.x - 15, this.y + 15,
+        this.x + 15, this.y + 15
+      );
+    }
+  }
+}
+
+```
+([https://editor.p5js.org/simonburgosb/sketches/O_0apqmVL])
 
 ## Bitácora de reflexión
+
 
 
 
