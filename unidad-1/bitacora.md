@@ -190,11 +190,13 @@ if (r < 0.01) {
 ```
 
 [Archivo p5.js]([https://ejemplo.com](https://editor.p5js.org/simonburgosb/sketches/UJ_XaLKmO))
+![Img Actividad](actividad5.png)
 
 ## Bitácora de aplicación 
 
 
 
 ## Bitácora de reflexión
+
 
 
