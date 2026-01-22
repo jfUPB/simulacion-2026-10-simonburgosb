@@ -221,12 +221,13 @@ function draw() {
 
 ```
 ([https://editor.p5js.org/simonburgosb/sketches/otxT05gaM])
-
+![Img Actividad](actividad6.png)
 ## Bitácora de aplicación 
 
 
 
 ## Bitácora de reflexión
+
 
 
 
