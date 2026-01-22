@@ -127,7 +127,7 @@ function draw() {
   circle(x, y, 16);
 ```
 
-[Archivo p5.js](https://ejemplo.com)
+[Archivo p5.js](https://editor.p5js.org/simonburgosb/sketches/BeVWAln3C)
 
 ![Img Actividad](actividad4.png)
 
@@ -290,8 +290,11 @@ class Particula {
 
 ```
 ([https://editor.p5js.org/simonburgosb/sketches/O_0apqmVL])
+![Img Actividad](actividad7.png)
+
 
 ## Bitácora de reflexión
+
 
 
 
