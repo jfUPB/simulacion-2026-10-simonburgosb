@@ -131,10 +131,70 @@ function draw() {
 
 ![Img Actividad](actividad4.png)
 
+### Actividad 5 
+Use esta tecnica para hacer como un salto de movimiento
+``` js
+// The Nature of Code
+// Daniel Shiffman
+// http://natureofcode.com
+
+let walker;
+let num;
+
+function setup() {
+  createCanvas(640, 240);
+  walker = new Walker(); //Guarda la direccion del objeti tipo waker creando una nueva funcion
+  background(255);
+  num = floor(random(2));
+}
+
+function draw() {
+  walker.step();
+  walker.show();
+}
+
+class Walker {
+  constructor() {
+    this.x = width/2 ;
+    this.y = height/2 ;
+  }
+
+  show() {
+    if (num == 0) {
+    stroke(0);
+    point(this.x, this.y);
+    }else if (num == 1) {
+   stroke(0);
+  circle(this.x, this.y, 50);
+    }
+  }
+
+  step() {
+    let r = random(1);
+    let xStep;
+    let yStep;
+//{!3} A 1% chance of taking a large step
+if (r < 0.01) {
+  xStep = random(-100, 100);
+  yStep = random(-100, 100);
+} else {
+  xStep = random(-1, 1);
+  yStep = random(-1, 1);
+}
+    
+    this.x += xStep;
+    this.y += yStep
+  }
+}
+
+```
+
+[Archivo p5.js]([https://ejemplo.com](https://editor.p5js.org/simonburgosb/sketches/UJ_XaLKmO))
 
 ## Bitácora de aplicación 
 
 
 
 ## Bitácora de reflexión
+
 
