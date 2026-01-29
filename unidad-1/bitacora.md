@@ -295,9 +295,47 @@ class Particula {
 
 ## Bitácora de reflexión
 
+### 1. Diferencia entre random() y Ruido Perlin (noise())
 
+La diferencia fundamental es que **random() genera valores completamente independientes**, es decir, cada número es impredecible y no tiene relación con el anterior. Esto produce cambios bruscos y resultados más caóticos.  
 
+En cambio, el Ruido Perlin (**noise()**) genera valores que cambian de forma **suave y continua**, porque los valores cercanos están correlacionados. Por eso, aunque parece aleatorio, tiene una estructura interna.
 
+- **Usaría random()** cuando quiero saltos inesperados, como escoger una forma al azar o hacer partículas explosivas.  
+- **Usaría noise()** cuando busco variaciones orgánicas, como movimientos fluidos, texturas naturales o cambios graduales de color.
 
+### 2. Distribución de probabilidad y diferencia visual entre uniforme y normal
 
+Una **distribución de probabilidad** es una forma de describir qué tan probable es que aparezcan ciertos valores dentro de un rango. No todos los números tienen por qué ocurrir con la misma frecuencia: algunos pueden ser más comunes y otros más raros.
 
+En una caminata aleatoria con **distribución uniforme**, todos los pasos tienen la misma probabilidad, lo que genera trayectorias más dispersas y erráticas.  
+
+En una caminata con **distribución normal (Gaussian)**, la mayoría de los pasos son pequeños y se concentran alrededor de un valor promedio, produciendo un movimiento más suave, natural y agrupado.
+
+Visualmente:
+
+- Uniforme → más caótica  
+- Normal → más orgánica  
+
+### 3. Papel de la aleatoriedad en el arte generativo
+
+La aleatoriedad cumple varias funciones importantes en el arte generativo:
+
+1. **Generar variación y sorpresa**, evitando que cada obra sea idéntica o totalmente predecible.  
+2. **Simular comportamientos naturales**, como crecimiento, movimiento orgánico o irregularidades presentes en el mundo real.  
+
+Además, permite que el artista diseñe sistemas abiertos donde el resultado final emerge del proceso.
+
+### 4. Concepto usado en tu obra final (Actividad 07)
+
+En mi obra final utilicé el concepto de **randomGaussian** para controlar la posición de las formas y los colores se modifican levemente con noise. 
+
+Esto generó una composición equilibrada: no totalmente uniforme ni completamente caótica. El efecto buscado era que las formas parecieran surgir de manera orgánica, como si existiera un patrón al azar.
+
+### 5. ¿Qué es una caminata (walk) en simulación? ¿Qué es un Lévy flight?
+
+Un “paseo” o “caminata” (**random walk**) es un proceso donde un objeto se mueve paso a paso tomando decisiones aleatorias en cada iteración.
+
+Una caminata tipo **Lévy flight** se caracteriza porque combina muchos pasos pequeños con saltos largos ocasionales. 
+
+Es común en fenómenos como la búsqueda de comida en animales o ciertos patrones de exploración.
