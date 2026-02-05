@@ -73,6 +73,105 @@ Paso por referencia
 Que con un vector se puede hacer un paso por referencia para modificar el valor
 ## Bitácora de aplicación 
 
+### Actividad 5
 
+* El método mag() devuelve la longitud (magnitud) de un vector.
+* mag() devuelve la longitud real. magSq() devuelve la magnitud al cuadrado.
+* normalize() convierte un vector en uno unitario — es decir, con longitud 1, pero mantiene la misma dirección.
+* El método dot() mide cuánta proyección tiene un vector sobre otro, diciendo qué tan alineados están.
+* La estática no modifica ninguno de los vectores. La de instancia opera sobre el vector al que fue llamada.
+* El producto cruz de dos vectores genera un tercer vector perpendicular al plano de los dos originales, y cuya longitud es proporcional al área del paralelogramo formado por ellos.
+* dist() calcula la distancia entre dos vectores
+* normalize(): Te da un vector de longitud 1. limit(max): Restringe la longitud máxima de un vector.
+
+### Actividad 6
+``` js
+let t = 0;
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(200);
+
+  let v0 = createVector(50, 50);
+  let v1 = createVector(100, 0);   // rojo
+  let v2 = createVector(0, 100);   // azul
+
+  // t oscila suavemente entre 0 y 1
+  let amt = (sin(t) + 1) / 2;
+
+  let v3 = p5.Vector.lerp(v1, v2, amt);
+
+  drawArrow(v0, v1, color('red'));
+  drawArrow(v0, v2, color('blue'));
+  drawArrow(v0, v3, lerpColor(color('red'), color('blue'), amt));
+
+  t += 0.05;
+}
+
+function drawArrow(base, vec, myColor) {
+  push();
+  stroke(myColor);
+  strokeWeight(6);
+  fill(myColor);
+
+  translate(base.x, base.y);
+  line(0, 0, vec.x, vec.y);
+
+  rotate(vec.heading());
+  let arrowSize = 7;
+  translate(vec.mag() - arrowSize, 0);
+  triangle(0, arrowSize / 2, 0, -arrowSize / 2, arrowSize, 0);
+
+  pop();
+}
+```
+* lerp() significa linear interpolation (interpolación lineal).
+* lerpColor() hace exactamente lo mismo… pero con colores
+* Esta función usa transformaciones.
+
+### Actividad 7
+Motion 101 es el algoritmo más elemental de movimiento:
+* Sumar la velocidad a la posición
+* Dibujar el objeto en su nueva posición
+
+Vectores como flechas
+* La posición es un vector que apunta desde el origen hasta la ubicación actual del objeto.
+* La velocidad es otro vector que indica dirección y rapidez de movimiento.
+
+#### En el ejemplo 
+``` js
+update() {
+  this.position.add(this.velocity);
+}
+```
+Cada frame:
+* Se suma la velocidad a la posición
+* El objeto se desplaza exactamente ese vector
+
+Si la velocidad no cambia:
+* El movimiento es uniforme
+* La trayectoria es una línea recta
+
+
+### Actividad 8
+#### Aceleracion Constante
+* El objeto empieza lento
+* Cada frame va más rápido
+* Movimiento rectilíneo acelerado
+
+#### Aceleracion aleatoria
+* Movimiento tipo “borracho”
+* Cambios bruscos de dirección
+* No hay trayectoria estable
+
+#### Aceleracion hacia el mouse
+* El objeto “persigue” el cursor
+
+
+## Bitácora de Aplicacion
 
 ## Bitácora de reflexión
+
