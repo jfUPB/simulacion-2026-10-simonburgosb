@@ -232,6 +232,131 @@ class Mover {
 
 ## Bitácora de aplicación 
 
+El concepto de la historia es que la energia se transforma pero nunca se destruye hasta llegar a un punto de unidad es por esos que la obra es como que siempre cobra vida. La obra generativa parte de una forma primordial: un círculo, símbolo de unidad, equilibrio y reposo. Esta forma inicial representa un sistema estable, sin tensiones externas. A medida que el usuario interactúa con la obra, se introduce una fuerza de estiramiento que actúa como un “jalón” desde el centro hacia el exterior, rompiendo progresivamente esa estabilidad inicial.
 
+https://editor.p5js.org/simonburgosb/sketches/g4gNmZ4f5
+
+``` js
+let particles = [];
+let center;
+let mode = "mandala";
+
+function setup() {
+  createCanvas(600, 600);
+  center = createVector(width / 2, height / 2);
+
+  let total = 24;
+  let baseRadius = 120;
+
+  for (let i = 0; i < total; i++) {
+    let angle = map(i, 0, total, 0, TWO_PI);
+    particles.push(new Particle(angle, baseRadius));
+  }
+}
+
+function draw() {
+  background(245);
+
+  for (let p of particles) {
+    let target;
+
+    if (mode === "mandala") {
+      target = p.mandalaTarget();
+    } else {
+      target = p.circleTarget();
+    }
+
+    // Fuerza de atracción hacia el objetivo
+    let force = p5.Vector.sub(target, p.position);
+    force.mult(0.05);
+    p.applyForce(force);
+
+    // Fricción
+    let friction = p.velocity.copy();
+    friction.normalize();
+    friction.mult(-0.2);
+    p.applyForce(friction);
+
+    p.update();
+  }
+
+  drawConnections();
+
+  for (let p of particles) {
+    p.show();
+  }
+}
+
+function keyPressed() {
+  if (keyCode === RIGHT_ARROW) {
+    mode = "circle";
+  }
+  if (keyCode === LEFT_ARROW) {
+    mode = "mandala";
+  }
+}
+
+// -----------------------------------
+
+class Particle {
+  constructor(angle, radius) {
+    this.angle = angle;
+    this.radius = radius;
+
+    this.position = this.mandalaTarget().copy();
+    this.velocity = createVector();
+    this.acceleration = createVector();
+    this.mass = 1;
+  }
+
+  mandalaTarget() {
+    // Forma tipo mandala mecánica
+    let r = this.radius + sin(this.angle * 4) * 40;
+    let x = center.x + cos(this.angle) * r;
+    let y = center.y + sin(this.angle) * r;
+    return createVector(x, y);
+  }
+
+  circleTarget() {
+    // Forma círculo simple
+    let r = 80;
+    let x = center.x + cos(this.angle) * r;
+    let y = center.y + sin(this.angle) * r;
+    return createVector(x, y);
+  }
+
+  applyForce(force) {
+    let f = p5.Vector.div(force, this.mass);
+    this.acceleration.add(f);
+  }
+
+  update() {
+    this.velocity.add(this.acceleration);
+    this.position.add(this.velocity);
+    this.acceleration.mult(0);
+  }
+
+  show() {
+    noStroke();
+    fill(200, 200, 30);
+    circle(this.position.x, this.position.y, 6);
+  }
+}
+
+// -----------------------------------
+
+function drawConnections() {
+  stroke(180, 0, 0, 140);
+  noFill();
+  beginShape();
+  for (let p of particles) {
+    vertex(p.position.x, p.position.y);
+  }
+  endShape(CLOSE);
+}
+```
+
+<img width="520" height="493" alt="image" src="https://github.com/user-attachments/assets/a0f2cb0a-9c63-424e-92e8-84017be76a96" />
 
 ## Bitácora de reflexión
+
