@@ -360,3 +360,11 @@ function drawConnections() {
 
 ## Bitácora de reflexión
 
+Motion 101 es el modelo básico de movimiento usado en The Nature of Code para simular cómo se mueve un objeto en un sistema digital.
+* Fuerza → produce aceleración
+* Aceleración → cambia la velocidad; no mueve al objeto directamente
+* Velocidad → cambia la posición; si mueve como tal el objeto
+* Posicion es el resuktado posible
+
+https://editor.p5js.org/simonburgosb/sketches/fobMrgfX5
+
