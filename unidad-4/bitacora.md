@@ -77,8 +77,135 @@ Este ejercicio permitió comprender mejor cómo funcionan los sistemas físicos 
 Este ejercicio permitió comprender cómo los sistemas físicos pueden volverse más complejos al conectar varios elementos entre sí. Un sistema de péndulos en serie genera movimientos más dinámicos e impredecibles que un péndulo simple. También ayudó a reforzar el uso de vectores, ángulos y aceleración angular para simular fenómenos físicos dentro de una animación interactiva.
 
 ## Bitácora de aplicación 
+La obra imagina un ecosistema de datos que ha sobrevivido a un sistema operativo obsoleto. Estos péndulos no son objetos físicos, sino "procesos" que intentan  apegarse a la realidad para mantenerse organizados. Sin embargo, el sistema está degradado, lo que genera ruido y fallos visuales.
 
+``` js
+
+let pendulums = [];
+let num = 25;
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  // Creamos varios péndulos con diferentes longitudes
+  for (let i = 0; i < num; i++) {
+    pendulums.push(new Pendulum(width / 2, 50, 150 + (i * 15)));
+  }
+}
+
+function draw() {
+  // Estética teamLab: Estela de luz
+  background(0, 30); 
+  
+  for (let p of pendulums) {
+    // --- UNIDAD 3: FUERZAS ---
+    
+    // 1. Fuerza de Gravedad (Simplificada para péndulo: -g * sin(theta))
+    let gravity = 0.8;
+    let forceMagnitude = -1 * gravity * sin(p.angle);
+    
+    // 2. Unidad 1: Ruido de Perlin (Viento digital)
+    let n = noise(p.noiseOffset, frameCount * 0.01);
+    let wind = map(n, 0, 1, -0.05, 0.05);
+
+    // Aplicamos las fuerzas al sistema
+    p.applyForce(forceMagnitude);
+    p.applyForce(wind);
+    
+    // Interactividad: Mouse afecta la aceleración angular
+    if (mouseIsPressed) {
+      let mouseForce = map(mouseX - pmouseX, -20, 20, -0.02, 0.02);
+      p.applyForce(mouseForce);
+    }
+
+    // --- UNIDAD 2: MOTION 101 ---
+    p.update();
+    p.display();
+  }
+}
+
+class Pendulum {
+  constructor(x, y, r) {
+    this.origin = createVector(x, y);
+    this.position = createVector(0, 0);
+    this.r = r;
+    this.angle = PI / 4;
+    
+    this.velocity = 0.0;
+    this.acceleration = 0.0;
+    this.damping = 0.992; // Resistencia del aire
+    this.noiseOffset = random(1000);
+  }
+
+  // Método requerido por la Unidad 3
+  applyForce(f) {
+    // Asumimos masa 1, entonces F = A
+    this.acceleration += f / (this.r * 0.1); // La longitud afecta la aceleración
+  }
+
+  update() {
+    // Lógica Motion 101 aplicada a rotación
+    this.velocity += this.acceleration;
+    this.velocity *= this.damping;
+    this.angle += this.velocity;
+
+    // Conversión a coordenadas cartesianas para dibujo (Vectores)
+    this.position.set(this.r * sin(this.angle), this.r * cos(this.angle));
+    this.position.add(this.origin);
+
+    // REGLA DE ORO: Limpiar aceleración (Unidad 3)
+    this.acceleration = 0;
+    this.noiseOffset += 0.01;
+  }
+
+  display() {
+    stroke(255, 50);
+    strokeWeight(1);
+    
+    // Brazo del péndulo (Estética Ikeda)
+    line(this.origin.x, this.origin.y, this.position.x, this.position.y);
+    
+    // El "punto" de datos
+    fill(255);
+    noStroke();
+    rectMode(CENTER);
+    
+    // Glitch visual aleatorio tipo Ikeda
+    if (random(1) > 0.98) {
+      rect(this.position.x, this.position.y, random(20, 100), 1);
+      textSize(8);
+      text("DATA_STRM_" + floor(this.position.y), this.position.x + 10, this.position.y);
+    }
+    
+    ellipse(this.position.x, this.position.y, 4, 4);
+  }
+}
+```
+https://editor.p5js.org/simonburgosb/sketches/zh2frZAi2
+
+
+<img width="926" height="681" alt="image" src="https://github.com/user-attachments/assets/65de54c3-2152-46e1-9365-1342b9018af8" />
+
+<img width="911" height="677" alt="image" src="https://github.com/user-attachments/assets/bc2c450b-ad15-4692-9c5d-0b62e2c3444e" />
 
 
 ## Bitácora de reflexión
+
+<img width="1278" height="655" alt="image" src="https://github.com/user-attachments/assets/2822ab37-a515-4ba7-8d17-1d9af9a636cc" />
+
+1. Visualización de Datos Dinámica (Data Viz)
+* Oportunidad: Olvidar los gráficos estáticos de Excel.
+* Aplicación: Usar la Unidad 2 (Motion) y Unidad 3 (Fuerzas) para crear tableros donde los datos económicos o métricas de usuario se comporten como organismos vivos. Si una métrica cae, la "gravedad" vectorial la arrastra; si hay volatilidad, el Ruido de Perlin (Unidad 1) agita los nodos.
+
+2. Diseño de Interfaces (UI/UX) Generativo
+* Oportunidad: Crear experiencias de usuario que no se sientan rígidas ni predecibles.
+* Aplicación: Aplicar Fuerzas de Atracción y Repulsión en menús interactivos. En lugar de animaciones lineales, usar sistemas donde los elementos de la interfaz orbiten el cursor del usuario, creando una sensación de "fluidez orgánica" que mejora el engagement.
+
+3. Instalaciones Inmersivas y "Phygital"
+* Oportunidad: Espacios físicos que reaccionan a las personas (estilo teamLab).
+* Aplicación: Integrar sensores (cámara, Kinect, micrófonos) como entradas de fuerza externas. Tu perfil profesional gana un diferencial enorme al poder proponer espacios donde las paredes "cobran vida" usando Sistemas de Partículas (Unidad 4) que huyen o siguen a los clientes en una tienda o galería.
+
+4. Simulación y Prototipado
+* Oportunidad: Modelar comportamientos del mundo real sin software de ingeniería pesado.
+* Aplicación: Usar la lógica de Vectores y Masas para simular flujos de personas, logística de almacenes o incluso comportamientos de fluidos de manera visual y rápida para presentaciones de alto impacto.
+
 
