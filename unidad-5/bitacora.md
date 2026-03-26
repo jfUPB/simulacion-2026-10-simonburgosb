@@ -321,5 +321,147 @@ https://editor.p5js.org/simonburgosb/sketches/irbTIIMvu
 <img width="717" height="226" alt="image" src="https://github.com/user-attachments/assets/144e4f19-7b2f-4c08-abc1-7be7aa0562e7" />
 <img width="718" height="321" alt="image" src="https://github.com/user-attachments/assets/55006f80-c7f8-4bc3-9c1a-57b23aa3e2e8" />
 
+### Codigos 
+#### Emitter
+``` js
+class Emitter {
+  constructor(x, y) {
+    this.particles = [];
+  }
 
+  addIdea(x, y) {
+    this.particles.push(new IdeaParticle(x, y));
+  }
+
+  applyForce(force) {
+    for (let p of this.particles) {
+      p.applyForce(force);
+    }
+  }
+
+  run() {
+    for (let i = this.particles.length - 1; i >= 0; i--) {
+      let p = this.particles[i];
+      p.run();
+
+      // TRANSFORMACIÓN
+      if (p instanceof IdeaParticle && p.lifespan < 150) {
+        this.particles.push(new ConversationParticle(p.position.x, p.position.y));
+      }
+
+      if (p.isDead()) {
+        this.particles.splice(i, 1);
+      }
+    }
+  }
+}
+```
+
+#### Partcicle Idea
+``` js
+class IdeaParticle {
+  constructor(x, y) {
+    this.position = createVector(x, y);
+    this.velocity = createVector(random(-1, 1), random(-2, -0.5));
+    this.acceleration = createVector(0, 0);
+    this.lifespan = 255;
+  }
+
+  applyForce(f) {
+    this.acceleration.add(f);
+  }
+
+  run() {
+    this.update();
+    this.show();
+  }
+
+  update() {
+    this.velocity.add(this.acceleration);
+    this.position.add(this.velocity);
+    this.acceleration.mult(0);
+    this.lifespan -= 2;
+  }
+
+  show() {
+    noStroke();
+    fill(100, 200, 255, this.lifespan);
+    circle(this.position.x, this.position.y, 6);
+  }
+
+  isDead() {
+    return this.lifespan < 0;
+  }
+}
+```
+
+#### Particle Pensmiento y conversacion
+``` js
+class ConversationParticle {
+  constructor(x, y) {
+    this.position = createVector(x, y);
+    this.velocity = createVector(random(-2, 2), random(-0.5, 0.5));
+    this.acceleration = createVector(0, 0);
+    this.lifespan = 255;
+    this.size = random(8, 16);
+  }
+
+  applyForce(f) {
+    this.acceleration.add(f);
+  }
+
+  run() {
+    this.update();
+    this.show();
+  }
+
+  update() {
+    this.velocity.add(this.acceleration);
+    this.position.add(this.velocity);
+    this.lifespan -= 3;
+    this.acceleration.mult(0);
+  }
+
+  show() {
+    stroke(255, this.lifespan);
+    noFill();
+    circle(this.position.x, this.position.y, this.size);
+
+    // sensación de conexión
+    line(this.position.x, this.position.y,
+         this.position.x + random(-10,10),
+         this.position.y + random(-10,10));
+  }
+
+  isDead() {
+    return this.lifespan < 0;
+  }
+}
+```
+
+#### Sketch
+``` js
+let emitter;
+
+function setup() {
+  createCanvas(800, 400);
+  emitter = new Emitter(width / 2, height / 2);
+}
+
+function draw() {
+  background(20, 20, 30, 50);
+
+  let gravity = createVector(0, 0.03);
+  let wind = createVector(0.02, 0);
+
+  emitter.applyForce(gravity);
+  emitter.applyForce(wind);
+
+  emitter.run();
+}
+
+function mousePressed() {
+  emitter.addIdea(mouseX, mouseY);
+}
+```
 ## Bitácora de reflexión
