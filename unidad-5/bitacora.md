@@ -465,3 +465,49 @@ function mousePressed() {
 }
 ```
 ## Bitácora de reflexión
+
+1. Una partícula es una entidad con estado
+
+Una partícula no es solo un punto en pantalla, sino un objeto que guarda información sobre sí misma, como su posición, velocidad o tiempo de vida. Ese estado es lo que permite que se comporte de forma única dentro del sistema.
+
+2. Una partícula tiene ciclo de vida
+
+Cada partícula pasa por etapas: nace, evoluciona y muere. Este ciclo no es instantáneo, sino progresivo, y define cómo cambia su comportamiento y apariencia con el tiempo.
+
+3. Un sistema de partículas gestiona colecciones dinámicas de elementos
+
+El sistema no trabaja con una sola partícula, sino con muchas al mismo tiempo, que aparecen y desaparecen constantemente. Es una colección que cambia en cada momento.
+
+4. La creación y eliminación de partículas no es un detalle técnico menor
+
+Crear y eliminar partículas no es solo por rendimiento, sino que hace parte del significado del sistema. Define el ritmo, la duración y la intención de lo que se está representando.
+
+5. Separación entre partícula y sistema/emisor
+
+Cada partícula se encarga de su propio comportamiento, mientras que el emisor se encarga de organizarlas y gestionarlas. Esta separación hace que el sistema sea más claro, modular y fácil de expandir.
+
+6. El emisor es una abstracción importante
+
+El emisor no es solo un lugar donde nacen partículas, sino una entidad que controla cómo, cuándo y por qué aparecen. Permite pensar en el sistema como unidades más grandes, no solo partículas individuales.
+
+7. Pueden existir sistemas de sistemas
+
+No hay un solo sistema, pueden existir varios emisores funcionando al mismo tiempo. Esto permite crear estructuras más complejas donde múltiples fuentes interactúan o coexisten.
+
+8. Heterogeneidad con herencia y polimorfismo
+
+No todas las partículas tienen que ser iguales. Se pueden crear distintos tipos con comportamientos diferentes, pero que comparten una base común, lo que permite variedad sin perder coherencia.
+
+9. Las partículas responden a fuerzas globales y locales
+
+Las partículas pueden ser afectadas por fuerzas generales que impactan a todas (como la gravedad) o por fuerzas específicas que dependen del contexto (como un repulsor cercano).
+
+10. La visualización puede cambiar sin alterar el algoritmo
+
+La forma en que se ven las partículas (círculos, líneas, colores) puede modificarse sin cambiar la lógica interna del sistema. Esto permite separar lo visual de lo estructural.
+
+### Tranferencia a otra herramienta
+
+El núcleo del diseño —entidades con estado, ciclos de vida, fuerzas y relaciones— es completamente independiente de la herramienta utilizada. Lo que cambia es la forma de implementación, no la lógica del sistema.
+
+Esto demuestra que el proyecto no depende de p5.js, sino de principios fundamentales de diseño de sistemas dinámicos, los cuales pueden transferirse a múltiples entornos tecnológicos.
