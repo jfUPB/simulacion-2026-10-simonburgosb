@@ -169,9 +169,80 @@ class ParticleFire extends Particle {
   * Nuevas formas
   * Nuevas dinámicas
 
+## Actividad 4
+### Ejemplo 4.6
+### ¿Dónde se define la gravedad?
+let gravity = createVector(0, 0.1);
+### ¿Quién la aplica a las partículas?
+emitter.applyForce(gravity);
 
+Es una fuerza global
+
+### Example 4.7
+
+### Que diferencia las fuerzas
+| Fuerza   | Tipo      | Cómo se calcula      |
+| -------- | --------- | -------------------- |
+| Gravedad | Constante | Igual para todas     |
+| Repeller | Variable  | Depende de distancia |
+
+### ¿Dónde “vive” cada una?
+
+Gravedad
+* Vive en draw()
+* Es externa al sistema
+Repeller
+* Vive en su propia clase Repeller
+* Tiene lógica propia (repel())
+
+### ¿Qué principio físico se modela?
+Ley del inverso del cuadrado de la distancia
+
+### ¿Cambió la clase Particle?
+
+Prácticamente no por lo cual la partícula no sabe qué fuerzas existen
+
+### MODIFICACIÓN
+
+Voy a elegir:
+
+(b) Cambiar las fuerzas sin cambiar estructura ni visualización
+Modificación: agregar viento lateral
+Cambio realizado
+
+En draw() agregué:
+* let wind = createVector(0.05, 0);
+* emitter.applyForce(wind);
+
+### ¿Qué clases/funciones modifiqué?
+
+* Ninguna clase existente
+* Solo agregué lógica en draw()
+
+### ¿Qué NO modifiqué?
+* Particle
+* Emitter
+* Repeller
+* show()
+* isDead()
+
+### ¿Por qué fue posible?
+
+Porque el sistema está diseñado así para que las fuerzas sean externas y desacopladas
+
+| Aspecto                               | 4.2                   | 4.4       | 4.5                      | 4.6                    | 4.7                        |
+| ------------------------------------- | --------------------- | --------- | -------------------------| ---------------------- | ---------------------------|
+| **¿Quién crea partículas?**           | draw() directamente | Emitter     |Emitter                   |Emitter                 | Emitter                    |
+| **¿Hay clase Emitter?**               |  No                 |  Sí         | Sí                       | Sí                     | Sí                         |
+| **¿Hay herencia?**                    | No                  | No          | Sí                       | No                     | No                         |
+| **¿Hay fuerzas externas?**            |  No                 | No          |  No                      | Sí (gravedad)          | Sí (gravedad + repeller)   |
+| **¿Hay interacción entre elementos?** | No                  |  No         |  No                      | No (solo fuerza global)| Sí (repeller ↔             |
+| **¿Cómo mueren las partículas?**      | Por lifespan < 0    | Igual       | Igual                    | Igual                  | Igual                      |
 
 ## Bitácora de aplicación 
+Busca comunicar cómo las ideas pueden crecer y conectarse, pero también cómo pierden fuerza con el tiempo hasta desaparecer. La interacción del usuario simboliza el acto de generar nuevas ideas como impulsos individuales y de momentos ya que no es constante y alimentar el sistema.
+
+<img width="1600" height="639" alt="image" src="https://github.com/user-attachments/assets/f0dda5ba-f92e-4149-98d0-8bfe080b6d99" />
 
 
 ## Bitácora de reflexión
