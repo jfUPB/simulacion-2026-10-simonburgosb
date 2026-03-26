@@ -240,9 +240,86 @@ Porque el sistema está diseñado así para que las fuerzas sean externas y desa
 | **¿Cómo mueren las partículas?**      | Por lifespan < 0    | Igual       | Igual                    | Igual                  | Igual                      |
 
 ## Bitácora de aplicación 
-Busca comunicar cómo las ideas pueden crecer y conectarse, pero también cómo pierden fuerza con el tiempo hasta desaparecer. La interacción del usuario simboliza el acto de generar nuevas ideas como impulsos individuales y de momentos ya que no es constante y alimentar el sistema.
+Busca comunicar cómo las ideas pueden crecer y conectarse, pero también cómo pierden fuerza con el tiempo hasta desaparecer pero habiendo dejado una marca. La interacción del usuario simboliza el acto de generar nuevas ideas como impulsos individuales y de momentos ya que no es constante y alimentar el sistema.
 
 <img width="1600" height="639" alt="image" src="https://github.com/user-attachments/assets/f0dda5ba-f92e-4149-98d0-8bfe080b6d99" />
+
+1. Emisión de partículas
+
+Decisión:
+* Las partículas nacen únicamente cuando el usuario hace click.
+Por qué:
+* Refuerza la idea de que las ideas no son constantes, sino eventos intencionales.
+Significado:
+* El usuario representa la mente que genera ideas.
+
+2. Tipos de partículas
+
+Decisión:
+* Dos tipos:
+  * IdeaParticle
+  * ConversationParticle
+Por qué:
+* Permite representar transformación (no solo nacimiento y muerte).
+Significado:
+* Idea → re pensar y compartir → evolución del pensamiento dejando huella
+
+3. Transformación
+
+Decisión:
+* Una idea se convierte en algo para dedicarle tiempo y compartirla cuando su vida disminuye.
+Por qué:
+* Simula cómo una idea madura.
+Significado:
+* Las ideas no desaparecen inmediatamente, sino que cambian de forma.
+
+4. Fuerzas
+
+Decisión:
+* Gravedad (hacia abajo)
+* Viento (horizontal)
+Por qué:
+* Añaden dinamismo y evitan movimiento estático.
+Significado:
+* Gravedad → el paso del tiempo / olvido y huella
+* Viento → influencias externas e internas (opiniones, contexto)
+
+5. Interacción entre elementos
+
+Decisión:
+* Las partículas de conversación generan líneas y conexiones visuales.
+
+Por qué:
+* Refuerza la idea de intercambio y analisis.
+
+Significado:
+* Conversación y pensamiento = conexión entre ideas
+
+6. Visualización
+
+Decisión:
+* Ideas: pequeñas, brillantes, sólidas
+* Conversaciones y Pensamientos: grandes, con contorno y líneas
+Por qué:
+* Diferenciación clara entre etapas
+
+Significado:
+* Idea = núcleo
+* Conversación y pensamiento = expansión
+
+7. Muerte de partículas
+
+Decisión:
+* No desaparecen de golpe: se desvanecen y se fragmentan visualmente
+Significado:
+* El olvido no es instantáneo, es progresivo dejando una huella para siempre
+
+
+https://editor.p5js.org/simonburgosb/sketches/irbTIIMvu
+
+<img width="1600" height="134" alt="image" src="https://github.com/user-attachments/assets/8c6a5f13-7033-4e19-a876-9d1a0f1244dc" />
+<img width="717" height="226" alt="image" src="https://github.com/user-attachments/assets/144e4f19-7b2f-4c08-abc1-7be7aa0562e7" />
+<img width="718" height="321" alt="image" src="https://github.com/user-attachments/assets/55006f80-c7f8-4bc3-9c1a-57b23aa3e2e8" />
 
 
 ## Bitácora de reflexión
