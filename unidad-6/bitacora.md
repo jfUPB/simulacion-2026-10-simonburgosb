@@ -178,7 +178,46 @@ Los flow fields funcionan mejor con música ambient o suave, donde el flujo cont
 
 ### Ventajas y limitaciones:
 Los flow fields ofrecen gran control y coherencia visual, siendo ideales para composiciones dirigidas, pero pueden volverse repetitivos y menos dinámicos; en cambio, el flocking destaca por su complejidad emergente y sensación de sistema vivo, aunque es más difícil de controlar y puede volverse caótico si no se equilibran bien sus parámetros.
+
+
 ## Bitácora de aplicación 
+
+#### Concepto visual
+
+La pieza representa una mente atrapada en un bucle emocional, donde los recuerdos, la obsesión y la pérdida se repiten sin resolverse. Visualmente, esto se traduce en un sistema de agentes que giran, se agrupan y se desintegran constantemente, sin llegar nunca a estabilizarse.
+
+#### Relación con el tema musical
+
+La canción tiene:
+* tristeza → dispersión
+* rabia → tensión y caos
+* obsesión → repetición de patrones
+
+Traducción visual:
+* Partes suaves: agentes lentos, dispersos
+* Partes intensas: flocking fuerte, compresión
+
+
+#### Mapa de decisiones
+* Fondo oscuro → introspección
+* Flow field → memoria constante / flujo emocional
+* Flocking → obsesión y apego
+* Baja cohesión inicial → inestabilidad
+* Pulsos en graves → latido emocional
+* Trails (rastros) → recuerdos que no desaparecen
+
+#### Mapa de interpretación
+* Click: ruptura emocional
+* A/S/D: estados emocionales
+* Audio: energía general del sistema
+
+#### Reactividad al audio
+* Amplitud (volumen):
+controla velocidad y dispersión
+* Graves:
+generan pulsos de contracción (como latidos emocionales)
+* Agudos:
+afectan jitter/movimiento nervioso
 
 
 ## Bitácora de reflexión
