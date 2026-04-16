@@ -255,10 +255,10 @@ let resolution = 20;
 let song;
 let fft, amp;
 
-let mode = "flow"; // flow, flock, chaos
+let mode = "flow"; 
 
 function preload() {
-  song = loadSound('Feid.mp3'); // asegúrate que esté en la misma carpeta
+  song = loadSound('Feid.mp3'); 
 }
 
 function setup() {
@@ -313,11 +313,9 @@ function draw() {
       b.applyForce(p5.Vector.random2D().mult(0.5));
     }
 
-    // AUDIO
     b.maxspeed = map(level, 0, 1, 2, 6);
     b.maxforce = map(treble, 0, 255, 0.05, 0.5);
 
-    // PULSO GRAVE
     if (bass > 180) {
       let explosion = p5.Vector.random2D().mult(5);
       b.applyForce(explosion);
@@ -333,7 +331,6 @@ let started = false;
 
 function mousePressed() {
 
-  // SOLO una vez
   if (!started) {
     fullscreen(true);
 
@@ -344,7 +341,6 @@ function mousePressed() {
     started = true;
   }
 
-  // interacción (explosión SIEMPRE)
   for (let b of boids) {
     let force = p5.Vector.sub(b.position, createVector(mouseX, mouseY));
     force.setMag(3);
@@ -352,26 +348,22 @@ function mousePressed() {
   }
 }
 
-// 👉 TECLAS PERFORMATIVAS
 function keyPressed() {
   if (key === 'A') mode = "flow";
   if (key === 'S') mode = "flock";
   if (key === 'D') mode = "chaos";
 }
 
-// 👉 AJUSTE A PANTALLA
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 
   cols = floor(width / resolution);
   rows = floor(height / resolution);
 
-  flow = new FlowField(); // recalcular campo
+  flow = new FlowField(); 
 }
 
-// =======================
-// FLOW FIELD
-// =======================
+
 
 class FlowField {
   constructor() {
@@ -403,9 +395,7 @@ class FlowField {
   }
 }
 
-// =======================
-// BOID
-// =======================
+
 
 class Boid {
   constructor(x, y) {
@@ -526,7 +516,7 @@ class Boid {
   }
 
   show() {
-    stroke(0, 255, 150, 120); // verde estilo Feid
+    stroke(0, 255, 150, 120); 
     strokeWeight(2);
     point(this.position.x, this.position.y);
   }
