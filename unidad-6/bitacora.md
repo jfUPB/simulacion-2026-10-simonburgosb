@@ -198,6 +198,17 @@ Traducción visual:
 * Partes intensas: flocking fuerte, compresión
 
 
+#### Moodboard
+
+<img width="736" height="1308" alt="image" src="https://github.com/user-attachments/assets/3700ced8-cce3-417c-b092-e4b1433d83b8" />
+<img width="736" height="1104" alt="image" src="https://github.com/user-attachments/assets/236af6b3-7cc6-46c7-a935-c5c215390cfd" />
+<img width="676" height="1200" alt="image" src="https://github.com/user-attachments/assets/1ee43b3b-e7fc-460f-a81f-aa1feae0462f" />
+<img width="736" height="1051" alt="image" src="https://github.com/user-attachments/assets/8cb40ff9-75e6-49c3-929e-d0565214a237" />
+<img width="736" height="708" alt="image" src="https://github.com/user-attachments/assets/9160472e-0ce7-4462-8182-65c2a5fd20b8" />
+
+#### Bocetos
+<img width="1600" height="785" alt="image" src="https://github.com/user-attachments/assets/5668a22c-ec05-41de-906b-18a5030f03d7" />
+
 #### Mapa de decisiones
 * Fondo oscuro → introspección
 * Flow field → memoria constante / flujo emocional
@@ -211,6 +222,12 @@ Traducción visual:
 * A/S/D: estados emocionales
 * Audio: energía general del sistema
 
+
+#### Justificacion del algoritmo
+El uso combinado de flow fields y flocking responde a la necesidad de representar dos dimensiones emocionales distintas presentes en la canción “Qué vuelta Vox”. Por un lado, el flow field permite construir una sensación de flujo constante y repetitivo, que se asocia con el pensamiento obsesivo y la imposibilidad de salir de un estado emocional. Este algoritmo aporta continuidad, suavidad y una dirección general, funcionando como una metáfora del paso del tiempo y de los recuerdos que siguen circulando sin resolverse.
+
+Por otro lado, el flocking introduce una capa de comportamiento colectivo que representa la tensión emocional, el apego y la necesidad de cercanía. A través de sus reglas de cohesión, alineación y separación, los agentes se agrupan, se dispersan y se reorganizan, generando dinámicas que evocan relaciones inestables, momentos de conexión y rupturas
+
 #### Reactividad al audio
 * Amplitud (volumen):
 controla velocidad y dispersión
@@ -218,6 +235,314 @@ controla velocidad y dispersión
 generan pulsos de contracción (como latidos emocionales)
 * Agudos:
 afectan jitter/movimiento nervioso
+
+#### Evidencia de la IA
+En este proyecto la IA se utilizo como apoyo tecnico, ya que el tema de las visuales, su interpretacion, reactiividad con el audio sistema de movimientso, modos, significados/relaciones e intereacciones fueron hechas por mi. 
+
+Específicamente, la IA se empleó para:
+* Resolver errores técnicos relacionados con reproducción de audio, uso de p5.FFT y p5.Amplitude.
+* Optimizar y organizar el código, facilitando la integración entre flocking y flow fields.
+* Proponer mejoras en los parametros para mayor notoriedad de la reactividad del audio.
+
+#### Codigo 
+
+``` js
+let boids = [];
+let flow;
+let cols, rows;
+let resolution = 20;
+
+let song;
+let fft, amp;
+
+let mode = "flow"; // flow, flock, chaos
+
+function preload() {
+  song = loadSound('Feid.mp3'); // asegúrate que esté en la misma carpeta
+}
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  background(0);
+
+  cols = floor(width / resolution);
+  rows = floor(height / resolution);
+
+  flow = new FlowField();
+
+  for (let i = 0; i < 150; i++) {
+    boids.push(new Boid(random(width), random(height)));
+  }
+
+  fft = new p5.FFT();
+  amp = new p5.Amplitude();
+
+  fft.setInput(song);
+  amp.setInput(song);
+
+  userStartAudio();
+}
+
+function draw() {
+  // TRAIL (efecto memoria)
+  fill(0, 30);
+  noStroke();
+  rect(0, 0, width, height);
+
+  let level = amp.getLevel() * 3;
+  let bass = fft.getEnergy("bass");
+  let treble = fft.getEnergy("treble");
+
+  flow.update();
+
+  for (let b of boids) {
+
+    if (mode === "flow") {
+      let f = flow.lookup(b.position);
+      b.applyForce(f);
+    }
+
+    if (mode === "flock") {
+      b.flock(boids);
+    }
+
+    if (mode === "chaos") {
+      let f = flow.lookup(b.position);
+      b.applyForce(f);
+      b.flock(boids);
+      b.applyForce(p5.Vector.random2D().mult(0.5));
+    }
+
+    // AUDIO
+    b.maxspeed = map(level, 0, 1, 2, 6);
+    b.maxforce = map(treble, 0, 255, 0.05, 0.5);
+
+    // PULSO GRAVE
+    if (bass > 180) {
+      let explosion = p5.Vector.random2D().mult(5);
+      b.applyForce(explosion);
+    }
+
+    b.update();
+    b.edges();
+    b.show();
+  }
+}
+
+let started = false;
+
+function mousePressed() {
+
+  // SOLO una vez
+  if (!started) {
+    fullscreen(true);
+
+    if (!song.isPlaying()) {
+      song.loop();
+    }
+
+    started = true;
+  }
+
+  // interacción (explosión SIEMPRE)
+  for (let b of boids) {
+    let force = p5.Vector.sub(b.position, createVector(mouseX, mouseY));
+    force.setMag(3);
+    b.applyForce(force);
+  }
+}
+
+// 👉 TECLAS PERFORMATIVAS
+function keyPressed() {
+  if (key === 'A') mode = "flow";
+  if (key === 'S') mode = "flock";
+  if (key === 'D') mode = "chaos";
+}
+
+// 👉 AJUSTE A PANTALLA
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+
+  cols = floor(width / resolution);
+  rows = floor(height / resolution);
+
+  flow = new FlowField(); // recalcular campo
+}
+
+// =======================
+// FLOW FIELD
+// =======================
+
+class FlowField {
+  constructor() {
+    this.field = new Array(cols);
+    for (let i = 0; i < cols; i++) {
+      this.field[i] = new Array(rows);
+    }
+    this.zoff = 0;
+  }
+
+  update() {
+    let xoff = 0;
+    for (let i = 0; i < cols; i++) {
+      let yoff = 0;
+      for (let j = 0; j < rows; j++) {
+        let angle = map(noise(xoff, yoff, this.zoff), 0, 1, 0, TWO_PI);
+        this.field[i][j] = p5.Vector.fromAngle(angle);
+        yoff += 0.1;
+      }
+      xoff += 0.1;
+    }
+    this.zoff += 0.01;
+  }
+
+  lookup(pos) {
+    let col = constrain(floor(pos.x / resolution), 0, cols - 1);
+    let row = constrain(floor(pos.y / resolution), 0, rows - 1);
+    return this.field[col][row].copy();
+  }
+}
+
+// =======================
+// BOID
+// =======================
+
+class Boid {
+  constructor(x, y) {
+    this.position = createVector(x, y);
+    this.velocity = p5.Vector.random2D();
+    this.acceleration = createVector(0, 0);
+
+    this.maxspeed = 3;
+    this.maxforce = 0.1;
+  }
+
+  applyForce(force) {
+    this.acceleration.add(force);
+  }
+
+  flock(boids) {
+    let sep = this.separate(boids).mult(1.5);
+    let ali = this.align(boids).mult(1.0);
+    let coh = this.cohesion(boids).mult(1.0);
+
+    this.applyForce(sep);
+    this.applyForce(ali);
+    this.applyForce(coh);
+  }
+
+  separate(boids) {
+    let desiredSeparation = 25;
+    let steer = createVector(0, 0);
+    let count = 0;
+
+    for (let other of boids) {
+      let d = dist(this.position.x, this.position.y, other.position.x, other.position.y);
+      if (d > 0 && d < desiredSeparation) {
+        let diff = p5.Vector.sub(this.position, other.position);
+        diff.normalize();
+        diff.div(d);
+        steer.add(diff);
+        count++;
+      }
+    }
+
+    if (count > 0) steer.div(count);
+
+    if (steer.mag() > 0) {
+      steer.setMag(this.maxspeed);
+      steer.sub(this.velocity);
+      steer.limit(this.maxforce);
+    }
+
+    return steer;
+  }
+
+  align(boids) {
+    let neighborDist = 50;
+    let sum = createVector(0, 0);
+    let count = 0;
+
+    for (let other of boids) {
+      let d = p5.Vector.dist(this.position, other.position);
+      if (d > 0 && d < neighborDist) {
+        sum.add(other.velocity);
+        count++;
+      }
+    }
+
+    if (count > 0) {
+      sum.div(count);
+      sum.setMag(this.maxspeed);
+      let steer = p5.Vector.sub(sum, this.velocity);
+      steer.limit(this.maxforce);
+      return steer;
+    }
+
+    return createVector(0, 0);
+  }
+
+  cohesion(boids) {
+    let neighborDist = 50;
+    let sum = createVector(0, 0);
+    let count = 0;
+
+    for (let other of boids) {
+      let d = p5.Vector.dist(this.position, other.position);
+      if (d > 0 && d < neighborDist) {
+        sum.add(other.position);
+        count++;
+      }
+    }
+
+    if (count > 0) {
+      sum.div(count);
+      return this.seek(sum);
+    }
+
+    return createVector(0, 0);
+  }
+
+  seek(target) {
+    let desired = p5.Vector.sub(target, this.position);
+    desired.setMag(this.maxspeed);
+    let steer = p5.Vector.sub(desired, this.velocity);
+    steer.limit(this.maxforce);
+    return steer;
+  }
+
+  update() {
+    this.velocity.add(this.acceleration);
+    this.velocity.limit(this.maxspeed);
+    this.position.add(this.velocity);
+    this.acceleration.mult(0);
+  }
+
+  edges() {
+    if (this.position.x > width) this.position.x = 0;
+    if (this.position.x < 0) this.position.x = width;
+    if (this.position.y > height) this.position.y = 0;
+    if (this.position.y < 0) this.position.y = height;
+  }
+
+  show() {
+    stroke(0, 255, 150, 120); // verde estilo Feid
+    strokeWeight(2);
+    point(this.position.x, this.position.y);
+  }
+}
+```
+
+#### Enlace al Sketch
+https://editor.p5js.org/simonburgosb/sketches/4QowVfvNG
+
+
+#### Capturas del codigo
+<img width="881" height="671" alt="image" src="https://github.com/user-attachments/assets/a807fe46-c3f3-49d0-92dc-d6ef2cc8d8b5" />
+
+<img width="901" height="452" alt="image" src="https://github.com/user-attachments/assets/891c2464-d002-4e55-94c2-1ca7ce6caffc" />
+
+
 
 
 ## Bitácora de reflexión
