@@ -78,7 +78,211 @@ El audio no actúa como un simple detonador de movimiento, sino como un modulado
 La IA se utilizo para generar el sistema reactivo de las olas y ayudo a mejorar la interactividad del mouse
 
 ### Codigo
+``` js
+const { Engine, World, Bodies, Body } = Matter;
 
+let engine, world;
+let letters = [];
+let word = "BRISA";
+
+let windSound;
+let amplitude;
+
+// agua
+let waterPoints = [];
+let cols = 120;
+let waterLevel;
+
+let started = false;
+
+function preload() {
+  soundFormats('mp3', 'wav');
+  windSound = loadSound("wind.mp3");
+}
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+
+  engine = Engine.create();
+  world = engine.world;
+  engine.world.gravity.y = 0;
+
+  textFont('Helvetica');
+  textSize(110);
+  textAlign(CENTER, CENTER);
+
+  let centerX = width / 2;
+  let centerY = height / 2;
+
+  waterLevel = height * 0.80;
+
+  // centrado real
+  let totalWidth = textWidth(word);
+  let startX = centerX - totalWidth / 2;
+
+  let currentX = startX;
+
+  for (let i = 0; i < word.length; i++) {
+    let char = word[i];
+    let w = textWidth(char);
+
+    let body = Bodies.rectangle(
+      currentX + w / 2,
+      centerY + 50,
+      w,
+      80,
+      { frictionAir: 0.02 }
+    );
+
+    body.char = char;
+
+    World.add(world, body);
+    letters.push(body);
+
+    currentX += w;
+  }
+
+  amplitude = new p5.Amplitude();
+  amplitude.setInput(windSound);
+
+  for (let i = 0; i < cols; i++) {
+    waterPoints.push({
+      x: map(i, 0, cols - 1, 0, width),
+      baseY: waterLevel,
+      offset: random(1000)
+    });
+  }
+}
+
+function draw() {
+  background(232, 246, 249);
+
+  Engine.update(engine);
+
+  let level = started ? amplitude.getLevel() : 0.02;
+  let wind = map(level, 0, 0.3, 0.0005, 0.002);
+  let t = frameCount * 0.01;
+
+  drawWater(level);
+
+  for (let body of letters) {
+
+    // viento
+    let nx = noise(body.position.x * 0.005, t);
+    let ny = noise(body.position.y * 0.005, t + 100);
+
+    let fx = map(nx, 0, 1, -wind, wind);
+    let fy = map(ny, 0, 1, -wind * 0.4, wind * 0.4);
+
+    Body.applyForce(body, body.position, { x: fx, y: fy });
+
+    let waterY = getWaterHeightAt(body.position.x, level);
+    let distToWater = body.position.y - waterY;
+
+    if (distToWater > -20 && distToWater < 60) {
+
+      let lift = map(distToWater, -20, 60, 0.004, 0);
+      Body.applyForce(body, body.position, { x: 0, y: -lift });
+
+      Body.setVelocity(body, {
+        x: body.velocity.x * 0.99,
+        y: body.velocity.y * 0.95
+      });
+    }
+
+    let dx = mouseX - body.position.x;
+    let dy = mouseY - body.position.y;
+    let d = dist(mouseX, mouseY, body.position.x, body.position.y);
+
+    if (d < 250) {
+      let force = map(d, 0, 250, 0.004, 0);
+
+      if (mouseIsPressed) force *= 3;
+
+      Body.applyForce(body, body.position, {
+        x: dx * force * 0.001,
+        y: dy * force * 0.001
+      });
+    }
+
+    drawLetter(body);
+  }
+}
+
+// letras
+function drawLetter(body) {
+  push();
+  translate(body.position.x, body.position.y);
+  rotate(body.angle);
+
+  fill(30, 50, 70);
+  noStroke();
+
+  text(body.char, 0, 0);
+  pop();
+}
+
+function drawWater(level) {
+  noStroke();
+  fill(140, 210, 235, 180);
+
+  beginShape();
+
+  curveVertex(0, getWaterHeightAt(0, level));
+
+  for (let i = 0; i < waterPoints.length; i++) {
+    let x = waterPoints[i].x;
+    let y = getWaterHeightAt(x, level);
+
+    curveVertex(x, y);
+  }
+
+  curveVertex(width, getWaterHeightAt(width, level));
+
+  vertex(width, height);
+  vertex(0, height);
+
+  endShape(CLOSE);
+}
+
+function getWaterHeightAt(x, level) {
+  let i = floor(map(x, 0, width, 0, waterPoints.length - 1));
+  let p = waterPoints[i];
+
+  let wave =
+    sin(frameCount * 0.015 + p.offset) * 4 +
+    sin(frameCount * 0.01 + p.offset * 1.5) * 2;
+
+  let audioWave = level * 40;
+
+  let d = dist(mouseX, mouseY, p.x, p.baseY);
+  let mouseInfluence = 0;
+
+  if (d < 150) {
+    mouseInfluence = map(d, 0, 150, 25, 0);
+  }
+
+  return p.baseY + wave + audioWave - mouseInfluence;
+}
+
+function mousePressed() {
+  if (!started) {
+    userStartAudio();
+
+    windSound.play();
+    windSound.setLoop(true);
+    windSound.setVolume(1);
+
+    fullscreen(true);
+
+    started = true;
+  }
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
+```
 
 ### Link del sketch
 https://editor.p5js.org/simonburgosb/sketches/gtZ4uLcsN
